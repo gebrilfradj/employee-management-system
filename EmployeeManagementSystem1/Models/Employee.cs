@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace TCSASystems.Blazor.EmployeeManagement.Models;
+namespace EmployeeManagementSystem1.Models;
 
 public class Employee
 {

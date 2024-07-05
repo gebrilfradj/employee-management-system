@@ -1,9 +1,8 @@
 ﻿using Bogus;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TCSASystems.Blazor.EmployeeManagement.Models;
-
-namespace TCSASystems.Blazor.EmployeeManagement.Data;
+using EmployeeManagementSystem1.Models;
+namespace EmployeeManagementSystem1.Data;
 
 public class DataContext : IdentityDbContext
 {

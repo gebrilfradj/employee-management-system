@@ -31,7 +31,7 @@ namespace EmployeeManagementSystem1.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(identity, isPersistent: false);
-                    return LocalRedirect("/Home/Index");
+                    return LocalRedirect("/");
                 }
             }
             return Page();

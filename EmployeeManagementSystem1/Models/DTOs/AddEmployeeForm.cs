@@ -1,0 +1,27 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EmployeeManagementSystem1.Models.DTOs
+{
+    public class AddEmployeeForm
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required]
+
+        public string Name { get; set; }
+        [Required]
+
+        public string ImgUrl { get; set; }
+        [Required]
+
+        public decimal Salary { get; set; }
+        [Required]
+
+        public EmployeeType Type { get; set; }
+        [Required]
+
+        public Position Position { get; set; }
+  
+
+    }
+}
