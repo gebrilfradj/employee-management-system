@@ -48,6 +48,4 @@ This Employee Management System is designed using ASP.NET Core and Blazor to str
 
 - If using Blazor Server, the `dotnet run` command in the root will host both the backend APIs and the Blazor server-side UI.
 
-### Demonstration
 
-Youtube Link: 
