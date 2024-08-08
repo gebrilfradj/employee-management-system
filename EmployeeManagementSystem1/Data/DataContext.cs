@@ -7,6 +7,8 @@ namespace EmployeeManagementSystem1.Data;
 public class DataContext : IdentityDbContext
 {
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
+
     public DataContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

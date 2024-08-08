@@ -23,8 +23,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.SignIn.RequireConfirmedEmail = false;
-})
+}).AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<DataContext>();
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -37,7 +39,6 @@ using (var scope = app.Services.CreateScope())
     if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
 

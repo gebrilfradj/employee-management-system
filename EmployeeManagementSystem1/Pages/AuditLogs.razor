@@ -1,0 +1,48 @@
+﻿@page "/auditlogs"
+@using EmployeeManagementSystem1.Data
+@using EmployeeManagementSystem1.Models
+@using EmployeeManagementSystem1.Services;
+
+
+
+<h1>Audit Logs</h1>
+
+@if (auditLogs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>User Name</th>
+                <th>Timestamp</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in auditLogs)
+            {
+                <tr>
+                    <td>@log.Action</td>
+                    <td>@log.UserName</td>
+                    <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@log.Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Inject] private IEmployeeService EmployeeService { get; set; }
+
+    private List<AuditLog>? auditLogs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        auditLogs = await EmployeeService.GetAuditLogsAsync();
+    }
+}

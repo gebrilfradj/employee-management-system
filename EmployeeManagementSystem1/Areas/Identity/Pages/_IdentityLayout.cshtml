@@ -1,13 +1,76 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-		<link href="~/css/site.css" rel="stylesheet" />
-	</head>
-	<body style="margin:50px">
-		<h1>Layout page</h1>
-		@RenderBody()
-	</body>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body, html {
+            height: 100%; /* Ensures the full height of the viewport */
+            margin: 0; /* Removes default margin */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0; /* Light grey background */
+        }
+
+        .container {
+            width: 70%; /* Sets the width of the container to 70% of the viewport width */
+            max-width: 800px; /* Maximum width */
+            padding: 40px; /* Spacing inside the container */
+            background-color: #fff; /* White background */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adds shadow for depth */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers content vertically within the container */
+        }
+
+        .header, .footer {
+            text-align: center; /* Centers the text of header and footer */
+        }
+
+        h1 {
+            margin-bottom: 20px; /* Space below the header */
+        }
+
+        form {
+            width: 100%; /* Form takes full width of its parent */
+            max-width: 300px; /* Maximum width of the form */
+            display: flex;
+            flex-direction: column; /* Stacks form elements vertically */
+        }
+
+        input, button {
+            height: 40px; /* Sets a fixed height for inputs and button */
+            margin-bottom: 15px; /* Space between form elements */
+            padding: 10px; /* Padding inside input fields and button */
+            border: 1px solid #ccc; /* Border color */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        button {
+            background-color: #0056b3; /* Button color */
+            color: white; /* Text color */
+            cursor: pointer; /* Changes cursor to pointer */
+        }
+
+            button:hover {
+                background-color: #004494; /* Darker shade on hover */
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Gebril's Employee Management System</h1>
+            <p>Please login or sign up to continue.</p>
+        </div>
+        
+        @RenderBody()
+        <div class="footer">
+            <p>Enjoy!</p>
+        </div>
+    </div>
+</body>
 </html>

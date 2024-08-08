@@ -1,25 +1,40 @@
 ﻿<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+<link rel="stylesheet" href="css/site.css">
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">EmployeeManagementSystem1</a>
+
+<div class="top-row ps-3 navbar navbar-dark" style="background-color: mediumpurple; color: white;">
+    <div class="container-fluid" >
+        <a class="navbar-brand" href="" style="font-size:25px">Intern Manager</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu" style="background-color: rebeccapurple; color: white;">
     <nav class="flex-column">
+        <div class="nav-items1 px-4" style="text-align: center">
+            <h1 class="welcome-text">Welcome User</h1>
+        </div>
+        <div class="nav-items px-4">
+            <img src="Images/file.png" style="height: 100px;">
+
+        </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Dashboard
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="add-employee">
-                <span class="oi oi-plus" aria-hidden="true"></span> Add Employee
+                <span class="oi oi-plus" aria-hidden="true"></span> Add Employees
             </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="auditlogs">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Audit Logs
+            </NavLink>
+
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="identity/account/logout">

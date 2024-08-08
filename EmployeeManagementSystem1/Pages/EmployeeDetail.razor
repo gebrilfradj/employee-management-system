@@ -1,11 +1,8 @@
-﻿@page "/add-employee"
+﻿@page "/employee/{employeeId:int}"
+@using EmployeeManagementSystem1.Models.DTOs;
 @using EmployeeManagementSystem1.Models;
 @using EmployeeManagementSystem1.Services;
-@using EmployeeManagementSystem1.Models.DTOs
 @using static EmployeeManagementSystem1.Components.Warning
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@using System.Security.Claims;
-
 @if (ShowWarning)
 {
     <Warning OnClickCallback="DismissWarning" Type=@Warning_Type Message="@Warning_Message" />
@@ -14,9 +11,9 @@ else
 {
     <Card>
         <div class="row user-detail-row">
-            <h3>Add New Employee</h3>
+            <h3>Update Employee</h3>
             <div class="form-group">
-                <EditForm Model="@addEmployeeForm" OnValidSubmit="AddNewEmployee">
+                <EditForm Model="@addEmployeeForm" OnValidSubmit="EditEmployee">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <p>
@@ -51,51 +48,79 @@ else
                             <label for="floatingInput">Image Url</label>
                         </div>
                     </p>
-                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <div @onclick="@ShowDeleteConfirmation" class="btn btn-danger" type="button">Delete</div>
                 </EditForm>
             </div>
         </div>
     </Card>
 }
 
+@if (ShowDeleteModal)
+{
+    <DeleteConfirmationModal>
+        <p>Are you sure you want to delete this employee?</p>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary me-1" @onclick="@DeleteEmployee" type="button">Confirm</button>
+            <button class="btn btn-danger" @onclick="@CancelDelete" type="button">Cancel</button>
+        </div>
+    </DeleteConfirmationModal>
+}
 
 @code {
+    [Parameter] public int EmployeeId { get; set; }
+
     [Inject] private IEmployeeService EmployeeService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
 
+    private AddEmployeeForm addEmployeeForm = new();
+    private bool ShowDeleteModal = false;
     private bool ShowWarning = false;
     private string Warning_Message = "";
     private WarningType Warning_Type;
 
-    private AddEmployeeForm addEmployeeForm = new();
+    private Employee Employee;
 
-    private async Task AddNewEmployee()
+    protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        var response = await EmployeeService.GetEmployee(EmployeeId);
 
-        if (!user.Identity.IsAuthenticated)
-        {
-            Warning_Type = WarningType.Error;
-            Warning_Message = "User is not authenticated.";
-            ShowWarning = true;
-            return;
-        }
+        Employee = response.Employee;
 
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-        {
-            Warning_Type = WarningType.Error;
-            Warning_Message = "User identifier not found.";
-            ShowWarning = true;
-            return;
-        }
+        addEmployeeForm.Name = Employee.Name;
+        addEmployeeForm.Type = Employee.Type;
+        addEmployeeForm.Position = Employee.Position;
+        addEmployeeForm.Salary = Employee.Salary;
+        addEmployeeForm.ImgUrl = Employee.ImgUrl;
+    }
 
-        var response = await EmployeeService.AddEmployee(addEmployeeForm,userId);
+    private async Task EditEmployee()
+    {
+        Employee.Name = addEmployeeForm.Name;
+        Employee.Type = addEmployeeForm.Type;
+        Employee.Position = addEmployeeForm.Position;
+        Employee.Salary = addEmployeeForm.Salary;
+        Employee.ImgUrl = addEmployeeForm.ImgUrl;
+
+        var response = await EmployeeService.EditEmployee(Employee);
         Warning_Type = response.StatusCode == 200 ? WarningType.Success : WarningType.Error;
         Warning_Message = response.Message;
         ShowWarning = true;
     }
+
+    private async Task DeleteEmployee()
+    {
+        var response = await EmployeeService.DeleteEmployee(Employee);
+        Warning_Type = response.StatusCode == 200 ? WarningType.Success : WarningType.Error;
+        Warning_Message = response.Message;
+        ShowDeleteModal = false;
+        ShowWarning = true;
+
+    }
+
+    private void ShowDeleteConfirmation() => ShowDeleteModal = true;
+
+    private void CancelDelete() => ShowDeleteModal = false;
 
     private void DismissWarning()
     {

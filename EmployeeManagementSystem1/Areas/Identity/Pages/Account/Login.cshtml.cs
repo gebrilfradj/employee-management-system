@@ -32,7 +32,7 @@ namespace EmployeeManagementSystem1.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return LocalRedirect("/Home/Index");
+                    return LocalRedirect("/");
                 }
             }
             return Page();

@@ -1,11 +1,21 @@
 ﻿@page "/"
-@using EmployeeManagementSystem1.Models;
-@using EmployeeManagementSystem1.Services;
+@using EmployeeManagementSystem1.Models
+@using EmployeeManagementSystem1.Services
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
+
+@if (ShowWarning)
+{
+    <Warning OnClickCallback="DismissWarning" Type=Warning.WarningType.Error Message="@ErrorMessage" />
+}
 @if (Employees != null)
 {
     <Card>
         <div class="table-responsive">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Name here" @oninput="FilterEmployees" />
+                <label for="floatingInput">Filter by name</label>
+            </div>
             <table class="table table-borderless mb-0">
                 <tbody>
                     @foreach (var employee in Employees)
@@ -20,6 +30,12 @@
                             </td>
                             <td class="centered-cell @GetEmployeeTypeStyle(employee.Type)">@employee.Type.GetDisplayName()</td>
                             <td class="centered-cell employee-salary">$@employee.Salary</td>
+                            <td class="centered-cell">
+                                @if (IsManager)
+                                {
+                                    <TableButton OnClickCallback="@(() => NavigateToEmployeeDetail(employee.Id))" />
+                                }
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -31,13 +47,35 @@
 @code {
     [Inject] private IEmployeeService EmployeeService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
+    private bool IsManager { get; set; }
+
 
     private List<Employee>? Employees;
+    private List<Employee>? EmployeesBackup;
+
+
+    private bool ShowWarning = false;
+    private string ErrorMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        IsManager = user.IsInRole("Manager");
+
         var response = await EmployeeService.GetEmployees();
-        Employees = response.Employees;
+
+
+        if (response.StatusCode == 500)
+        {
+            ShowWarning = true;
+            ErrorMessage = response.Message;
+        }
+        else
+        {
+            Employees = response.Employees;
+            EmployeesBackup = Employees;
+        }
     }
 
     private string GetEmployeeTypeStyle(EmployeeType employeeType) => employeeType switch
@@ -46,8 +84,24 @@
         EmployeeType.PartTime => "part-time",
         EmployeeType.Casual => "casual",
         EmployeeType.FullTime => "full-time"
-       
     };
+
+    private void NavigateToEmployeeDetail(int employeeId)
+    {
+        NavigationManager.NavigateTo($"/employee/{employeeId}");
+    }
+
+    private void FilterEmployees(ChangeEventArgs e)
+    {
+        Employees = EmployeesBackup;
+        Employees = Employees.Where(x => x.Name.IndexOf(e.Value.ToString(), StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+    }
+
+    private void DismissWarning()
+    {
+        ShowWarning = false;
+        NavigationManager.NavigateTo($"identity/account/logout", true);
+    }
 }
 
 <style>
@@ -100,21 +154,21 @@
 
     .part-time {
         color: white;
-        background-color: darkred !important;
+        background-color: mediumorchid !important;
     }
 
     .full-time {
         color: white;
-        background-color: darkblue !important;
+        background-color: mediumpurple !important;
     }
 
     .casual {
         color: white;
-        background-color: darkgreen !important;
+        background-color: purple !important;
     }
 
     .freelance {
         color: white;
-        background-color: darkmagenta !important;
+        background-color: rebeccapurple !important;
     }
 </style>
