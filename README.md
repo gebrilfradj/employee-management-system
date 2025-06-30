@@ -16,7 +16,6 @@ This Employee Management System is designed using ASP.NET Core and Blazor to str
 - **Backend**: ASP.NET Core
 - **ORM**: Entity Framework Core
 - **Database**: Microsoft SQL Server
-- **Testing**: xUnit, Moq
 
 ## Getting Started
 
